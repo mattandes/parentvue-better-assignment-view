@@ -1,5 +1,7 @@
 # ParentVUE: Better assignment view
 
+> This project is independent. It is not affiliated with, or endorsed by, Edupoint or any school district.
+
 A Chrome (and Edge) extension that adds a **Better assignment view** button to the ParentVUE gradebook. The button opens a full-page overlay with every class's assignments for a term in one place, with the things a parent cares about highlighted:
 
 - **Red:** missing work, and work that is past due and not graded yet
@@ -11,9 +13,17 @@ A Chrome (and Edge) extension that adds a **Better assignment view** button to t
 - Light and dark themes with a toggle (remembered), and the portal's mark legend (HP, PR, CP, DP, NS; traits C, O, S, N) at the bottom, reachable from the **Legend** button
 - Hover a standard's mark to see its description; teacher comments show under the assignment
 
-Grades are shown exactly as ParentVUE reports them; the view only reorganizes them. Press **Esc** or the ✕ to return to the normal page.
+### Dark Mode
 
-> This project is independent. It is not affiliated with, or endorsed by, Edupoint or any school district.
+![The overlay in dark mode, showing summary tiles and class cards with highlighted assignments](docs/images/overlay-dark.png)
+
+### Light Mode
+
+![The same view in light mode](docs/images/overlay-light.png)
+
+_Screenshots use made-up data._
+
+Grades are shown exactly as ParentVUE reports them; the view only reorganizes them. Press **Esc** or the ✕ to return to the normal page.
 
 ## Install (Chrome or Edge, developer mode)
 
@@ -100,7 +110,7 @@ parentvue-better-assignment-view/
 │   └── icons/
 ├── test/                    unit tests, browser test page, overlay preview, made-up fixtures
 ├── scripts/                 package.mjs (zip), serve.mjs (preview server), make-icons.mjs
-├── docs/                    specs: overview, business rules, UI, API notes, testing
+├── docs/                    specs: overview, business rules, UI, API notes, testing; images/ has the README screenshots
 └── .github/                 CI, release workflow, Dependabot
 ```
 

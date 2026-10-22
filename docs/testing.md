@@ -20,7 +20,7 @@ Fixtures in `test/fixtures/` are made up (student "Alex", school "Example M.S.")
 
 | Fixture | Holds |
 |---|---|
-| `q1_grading.json` | A full schedule, periods 1 to 8, with every state the overlay shows: missing, not graded, due soon, due later, due today, undated, excused and dropped work; all standards marks (HP, PR, CP, DP, NS), traits (C, O, S, N) and dotted domain marks (`PR.`, `DP.`); point, percent and letter scores; Formative, Summative and Classwork types; a teacher comment containing HTML (to show it is escaped); overall marks of every tone, a letter-graded class, a class with no assignments or overall mark; teachers with a valid, a missing and an invalid email address; an unlinked standard and an unmarked standard (both must not show) |
+| `q1_grading.json` | A full schedule, periods 1 to 8, with every state the overlay shows: missing, not graded, due soon, due later, due today, undated, excused and dropped work; all standards marks (HP, PR, CP, DP, NS), traits (C, O, S, N) and dotted domain marks (`PR.`, `DP.`); point, percent and letter scores; Formative, Summative and Classwork types; teacher comments, one of them containing HTML in Social Studies (to show it is escaped); overall marks of every tone, a letter-graded class, a class with no assignments or overall mark; teachers with a valid, a missing and an invalid email address; an unlinked standard and an unmarked standard (both must not show) |
 | `q1_progress.json` | The same term's Progress period: work that only it has ("Only in Q1 Progress") and an assignment Grading also has, with a different mark (Grading must win) |
 | `q2_progress.json` | The next term, early on: four classes with work in a mix of states (graded, missing, not graded, due soon, due later) and four with nothing yet |
 
@@ -30,6 +30,8 @@ Every change to a rule in `business-rules.md` needs a test here, written first a
 
 ### Visual preview
 `npm run preview`, then <http://localhost:8765/test/preview.html> mounts the overlay with the fixture data (no extension, no network): layout, themes, filters, Esc and focus. Fixture dates are shifted to the current date on load, so past-due, due-soon and later work all appear. Q1 shows every state; Q2 is a lighter term with work in four classes; Q3 and Q4 are empty. Open it in light and dark (the **Light mode** / **Dark mode** button) after any UI change.
+
+**README screenshots** (`docs/images/overlay-dark.png` and `overlay-light.png`) are captures of this page. Retake them after a visible UI change, with `npm run preview` running and Chrome closed to the profile used (a throwaway one is fine): `chrome --headless=new --hide-scrollbars --user-data-dir=<temp dir> --blink-settings=preferredColorScheme=0 --window-size=1280,976 --virtual-time-budget=8000 --screenshot=docs/images/overlay-dark.png http://localhost:8765/test/preview.html`, and the same with `preferredColorScheme=1` and `overlay-light.png`. (`0` is dark, `1` is light.) Check the images for anything that isn't made-up data.
 
 ## Manual: live checklist
 The popup, service worker, permission prompt and live data calls need real Chrome. Run this after any change to `manifest.json`, `background.js`, `popup.js`, `content.js` or the endpoints. Reload the extension at `chrome://extensions` first.
