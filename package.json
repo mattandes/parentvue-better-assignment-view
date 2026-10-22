@@ -1,0 +1,27 @@
+{
+  "name": "parentvue-better-assignment-view",
+  "version": "0.1.0",
+  "description": "ParentVUE: Better assignment view, a Chrome extension (dev tooling only; the extension itself has no dependencies)",
+  "private": true,
+  "license": "MIT",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "node test/run.js",
+    "package": "node scripts/package.mjs",
+    "preview": "node scripts/serve.mjs",
+    "check": "npm run lint && npm run format:check && npm test && npm run package"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.13.0",
+    "eslint-plugin-no-unsanitized": "^4.1.5",
+    "fflate": "^0.8.3",
+    "globals": "^17.13.0",
+    "prettier": "^3.9.10"
+  }
+}

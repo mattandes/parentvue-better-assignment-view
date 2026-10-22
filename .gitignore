@@ -1,0 +1,8 @@
+# captures of the live portal contain student information: keep them local
+live-captures/
+
+# local tooling
+node_modules/
+
+.superpowers/
+dist/

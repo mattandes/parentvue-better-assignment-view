@@ -1,0 +1,6 @@
+dist
+node_modules
+.superpowers
+test/fixtures
+package-lock.json
+*.md

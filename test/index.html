@@ -1,0 +1,60 @@
+<!doctype html>
+<meta charset="utf-8" />
+<title>ParentVUE: Better assignment view tests</title>
+<style>
+  body {
+    font:
+      14px/1.5 system-ui,
+      sans-serif;
+    margin: 24px;
+  }
+  .ok {
+    color: #1b7a43;
+  }
+  .bad {
+    color: #c62828;
+  }
+  pre {
+    margin: 2px 0 8px 20px;
+  }
+</style>
+<h1>Tests</h1>
+<p id="summary">Running…</p>
+<div id="out"></div>
+<p><a href="preview.html">Open the overlay preview with fixture data</a></p>
+<script src="harness.js"></script>
+<script src="../extension/portal.js"></script>
+<script src="../extension/logic.js"></script>
+<script src="../extension/ui.js"></script>
+<script src="logic.test.js"></script>
+<script src="ui.test.js"></script>
+<script src="portal.test.js"></script>
+<script>
+  (async () => {
+    const get = async (n) => (await fetch(`fixtures/${n}.json`)).json();
+    const ctx = {
+      L: PVBetter,
+      P: globalThis.PVPortal,
+      UI: globalThis.PVBetterUI,
+      F: {
+        q1_grading: await get("q1_grading"),
+        q1_progress: await get("q1_progress"),
+        q2_progress: await get("q2_progress"),
+      },
+    };
+    const results = PVHarness.run(PVTestModules, ctx);
+    const esc = (s) => String(s).replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" })[c]);
+    document.getElementById("out").innerHTML = results
+      .map(
+        (r) =>
+          `<div class="${r.ok ? "ok" : "bad"}">${r.ok ? "PASS" : "FAIL"} ${esc(r.name)}${r.ok ? "" : `<pre>${esc(r.error)}</pre>`}</div>`,
+      )
+      .join("");
+    const failed = results.filter((r) => !r.ok).length;
+    document.getElementById("summary").textContent = `${results.length - failed} passed, ${failed} failed`;
+    document.title = failed ? "FAIL" : "PASS";
+  })().catch((e) => {
+    document.getElementById("summary").textContent = "Error: " + e.message;
+    document.title = "FAIL";
+  });
+</script>

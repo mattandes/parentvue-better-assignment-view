@@ -1,0 +1,64 @@
+<!doctype html>
+<meta charset="utf-8" />
+<title>Overlay preview (fixture data)</title>
+<body
+  style="
+    font:
+      14px system-ui,
+      sans-serif;
+    margin: 24px;
+  "
+>
+  <p>
+    Preview of the overlay using the made-up data in <code>test/fixtures/</code>. The real extension fetches from
+    ParentVUE instead.
+  </p>
+  <button id="open">Open overlay</button>
+  <script src="../extension/logic.js"></script>
+  <script src="../extension/ui.js"></script>
+  <script>
+    (async () => {
+      // The fixtures are written around this date (see FIXTURE_TODAY in logic.test.js). Every date in them is shifted
+      // by the number of days between it and the real today, so "due soon", "past due" and the rest look the same
+      // whenever the preview is opened.
+      const FIXTURE_TODAY = "2026-10-12";
+      const day = (s) => Date.UTC(+s.slice(0, 4), +s.slice(5, 7) - 1, +s.slice(8, 10));
+      const shiftDays = Math.round((day(PVBetter.todayIso()) - day(FIXTURE_TODAY)) / 86400000);
+      const shiftIso = (iso) => new Date(day(iso) + shiftDays * 86400000).toISOString().slice(0, 10);
+      const shiftTimestamp = (v) =>
+        /^\d{4}-\d{2}-\d{2}T/.test(v) && !v.startsWith("0001-") ? shiftIso(v) + v.slice(10) : v;
+      const shiftUs = (v) => {
+        const m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec(v || "");
+        if (!m) return v;
+        const [y, mo, d] = shiftIso(`${m[3]}-${m[1].padStart(2, "0")}-${m[2].padStart(2, "0")}`).split("-");
+        return `${+mo}/${+d}/${y}`;
+      };
+      const load = async (name, periodName) => {
+        const raw = await (await fetch(`fixtures/${name}.json`)).json();
+        for (const c of raw.SchoolInfo.SchoolClasses) {
+          for (const a of c.Assignments || []) {
+            a.DateAssigned = shiftTimestamp(a.DateAssigned);
+            a.DateDue = shiftTimestamp(a.DateDue);
+          }
+          for (const s of c.Standards || []) s.Date = shiftUs(s.Date);
+        }
+        return PVBetter.normalizePeriod({ PeriodName: periodName }, raw);
+      };
+      const periods = [
+        await load("q1_grading", "Q1 Grading"),
+        await load("q1_progress", "Q1 Progress"),
+        await load("q2_progress", "Q2 Progress"),
+      ];
+      const loadTerm = async (term) => PVBetter.termClasses(periods, term);
+      const ui = PVBetterUI.create({
+        logic: PVBetter,
+        terms: ["Q1", "Q2", "Q3", "Q4"],
+        currentTerm: "Q1",
+        loadTerm,
+        studentName: "Alex",
+      });
+      document.getElementById("open").onclick = () => ui.open();
+      if (location.hash !== "#closed") ui.open();
+    })();
+  </script>
+</body>
